@@ -1,41 +1,64 @@
-CC = g++
-CFLAGS = -Wall
+CXX = g++
+CXXFLAGS = -std=c++20 -Wall -Wextra -g
+GLLIB = -lglut -lGLU -lGL
 
-# Platform-specific linker flags
-UNAME := $(shell uname)
-ifeq ($(UNAME), Darwin)
-LDFLAGS = -framework OpenGL -framework GLUT
-else
-LDFLAGS = -lglut -lGL -lGLU
-endif
+TARGET = logo
+BASELINE_DIR = baseline_objs
 
-OBJS = main.o program.o repeat.o forward.o jump.o left.o right.o
+# Files always built locally
+COMMON_SRC = main.cpp command.cpp
+COMMON_OBJ = $(COMMON_SRC:.cpp=.o)
 
-all: logo
+# Student-owned source files
+STUDENT1_SRC = program.cpp
+STUDENT2_SRC = repeat.cpp
+STUDENT3_SRC = forward.cpp jump.cpp left.cpp right.cpp
 
-logo: $(OBJS)
-	$(CC) $(OBJS) -o logo $(LDFLAGS)
+STUDENT1_OBJ = $(STUDENT1_SRC:.cpp=.o)
+STUDENT2_OBJ = $(STUDENT2_SRC:.cpp=.o)
+STUDENT3_OBJ = $(STUDENT3_SRC:.cpp=.o)
 
-main.o: main.cpp program.h command.h
-	$(CC) $(CFLAGS) -c main.cpp
+# Baseline object files
+STUDENT1_BASELINE_OBJ = $(BASELINE_DIR)/program.o
+STUDENT2_BASELINE_OBJ = $(BASELINE_DIR)/repeat.o
+STUDENT3_BASELINE_OBJ = $(BASELINE_DIR)/forward.o \
+                        $(BASELINE_DIR)/jump.o \
+                        $(BASELINE_DIR)/left.o \
+                        $(BASELINE_DIR)/right.o
 
-program.o: program.cpp program.h command.h forward.h jump.h left.h right.h repeat.h
-	$(CC) $(CFLAGS) -c program.cpp
+BASELINE_OBJ = $(STUDENT1_BASELINE_OBJ) $(STUDENT2_BASELINE_OBJ) $(STUDENT3_BASELINE_OBJ)
 
-repeat.o: repeat.cpp repeat.h command.h program.h
-	$(CC) $(CFLAGS) -c repeat.cpp
+# Full local build
+ALL_SRC = $(COMMON_SRC) $(STUDENT1_SRC) $(STUDENT2_SRC) $(STUDENT3_SRC)
+ALL_OBJ = $(ALL_SRC:.cpp=.o)
 
-forward.o: forward.cpp forward.h command.h
-	$(CC) $(CFLAGS) -c forward.cpp
+.PHONY: all student1 student2 student3 baseline clean
 
-jump.o: jump.cpp jump.h command.h
-	$(CC) $(CFLAGS) -c jump.cpp
+all: $(TARGET)
 
-left.o: left.cpp left.h command.h
-	$(CC) $(CFLAGS) -c left.cpp
+$(TARGET): $(ALL_OBJ)
+	$(CXX) $(ALL_OBJ) $(GLLIB) -o $(TARGET)
 
-right.o: right.cpp right.h command.h
-	$(CC) $(CFLAGS) -c right.cpp
+student1: $(COMMON_OBJ) $(STUDENT1_OBJ)
+	$(CXX) $(COMMON_OBJ) $(STUDENT1_OBJ) \
+	$(STUDENT2_BASELINE_OBJ) $(STUDENT3_BASELINE_OBJ) \
+	$(GLLIB) -o $(TARGET)
+
+student2: $(COMMON_OBJ) $(STUDENT2_OBJ)
+	$(CXX) $(COMMON_OBJ) $(STUDENT2_OBJ) \
+	$(STUDENT1_BASELINE_OBJ) $(STUDENT3_BASELINE_OBJ) \
+	$(GLLIB) -o $(TARGET)
+
+student3: $(COMMON_OBJ) $(STUDENT3_OBJ)
+	$(CXX) $(COMMON_OBJ) $(STUDENT3_OBJ) \
+	$(STUDENT1_BASELINE_OBJ) $(STUDENT2_BASELINE_OBJ) \
+	$(GLLIB) -o $(TARGET)
+
+baseline: $(COMMON_OBJ)
+	$(CXX) $(COMMON_OBJ) $(BASELINE_OBJ) $(GLLIB) -o $(TARGET)
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o logo
+	rm -f *.o $(TARGET)

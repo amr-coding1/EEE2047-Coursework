@@ -1,16 +1,27 @@
-#ifndef PROGRAM_H
-#define PROGRAM_H
+#ifndef PROGRAM_H_
+#define PROGRAM_H_
 
-#include "command.h"
+#include <iostream>
+#include <GL/gl.h>
+#include <GL/glut.h>
 #include <vector>
 
+#include "left.h"
+#include "right.h"
+#include "forward.h"
+#include "jump.h"
+
 class Program {
-private:
-    std::vector<Command*> cmds;
 public:
-    ~Program();
-    void run();
-    friend std::istream& operator>>(std::istream& is, Program& p);
+	void run();
+	~Program();
+	friend std::istream& operator>>(std::istream& in, Program& prog);
+private:
+	std::vector<Command*> cmds;
 };
 
-#endif
+
+
+std::istream& operator>>(std::istream& in, Program& prog);
+
+#endif /* PROGRAM_H_ */

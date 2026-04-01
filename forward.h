@@ -1,12 +1,12 @@
-#ifndef FORWARD_H
-#define FORWARD_H
+#ifndef FORWARD_H_
+#define FORWARD_H_
 
 #include "command.h"
 
 class Forward : public Command {
 public:
-    void run();
-    friend std::istream& operator>>(std::istream& is, Forward& f);
+	void run();
+	friend std::istream& operator>>(std::istream& in, Forward& f);
 };
 
-#endif
+#endif /* FORWARD_H_ */

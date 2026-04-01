@@ -1,12 +1,12 @@
-#ifndef JUMP_H
-#define JUMP_H
+#ifndef JUMP_H_
+#define JUMP_H_
 
 #include "command.h"
 
 class Jump : public Command {
 public:
-    void run();
-    friend std::istream& operator>>(std::istream& is, Jump& j);
+	void run();
+	friend std::istream& operator>>(std::istream& in, Jump& j);
 };
 
-#endif
+#endif /* JUMP_H_ */

@@ -1,12 +1,12 @@
-#ifndef RIGHT_H
-#define RIGHT_H
+#ifndef RIGHT_H_
+#define RIGHT_H_
 
 #include "command.h"
 
 class Right : public Command {
 public:
-    void run();
-    friend std::istream& operator>>(std::istream& is, Right& r);
+	void run();
+	friend std::istream& operator>>(std::istream& in, Right& r);
 };
 
-#endif
+#endif /* RIGHT_H_ */

@@ -1,15 +1,21 @@
-#ifndef COMMAND_H
-#define COMMAND_H
+#ifndef COMMAND_H_
+#define COMMAND_H_
+
+//-----------------------------------------
+// Do not modify this file
+//-----------------------------------------
 
 #include <iostream>
+#include <GL/gl.h>
+#include <GL/glut.h>
 
 class Command {
-protected:
-    float value;
 public:
-    Command() : value(0) {}
-    virtual ~Command() {}
-    virtual void run() = 0;
+	Command();
+	virtual ~Command();
+	virtual void run()=0;
+protected:
+	float value;
 };
 
-#endif
+#endif /* COMMAND_H_ */

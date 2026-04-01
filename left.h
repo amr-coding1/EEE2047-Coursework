@@ -1,12 +1,12 @@
-#ifndef LEFT_H
-#define LEFT_H
+#ifndef LEFT_H_
+#define LEFT_H_
 
 #include "command.h"
 
 class Left : public Command {
 public:
-    void run();
-    friend std::istream& operator>>(std::istream& is, Left& l);
+	void run();
+	friend std::istream& operator>>(std::istream& in, Left& l);
 };
 
-#endif
+#endif /* LEFT_H_ */
